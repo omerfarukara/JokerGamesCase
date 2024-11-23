@@ -1,0 +1,32 @@
+{
+  "steps": [
+    {
+      "fruitType": 0,
+      "count": 50
+    },
+    {
+      "fruitType": 1,
+      "count": 150
+    },
+    {
+      "fruitType": 2,
+      "count": 7
+    },
+    {
+      "fruitType": 2,
+      "count": 338
+    },
+    {
+      "fruitType": 0,
+      "count": 46
+    },
+    {
+      "fruitType": 2,
+      "count": 57
+    },
+    {
+      "fruitType": 1,
+      "count": 100
+    }
+  ]
+}
