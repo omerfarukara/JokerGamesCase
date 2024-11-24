@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
 using UnityEngine;
@@ -29,8 +30,9 @@ namespace _GameFolders.Scripts.Managers
             GameEventManager.OnStart -= OnStartHandler;
         }
 
-        private void OnStartHandler()
+        private async void OnStartHandler()
         {
+            await Task.Delay(100);
             Level level = JsonUtility.FromJson<Level>(levelJson.text);
             for (var index = 0; index < level.steps.Count; index++)
             {
@@ -53,6 +55,9 @@ namespace _GameFolders.Scripts.Managers
                         spawnFruit.Init(strawberrySprite, fruitType, stepObject.count);
                         break;
                 }
+                
+                await Task.Delay(100);
+
             }
         }
     }
