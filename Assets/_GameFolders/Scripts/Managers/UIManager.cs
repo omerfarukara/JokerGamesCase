@@ -1,5 +1,4 @@
-﻿using System;
-using _GameFolders.Scripts.Components;
+﻿using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
@@ -20,6 +19,14 @@ namespace _GameFolders.Scripts.Managers
         [SerializeField] private TextMeshProUGUI pearCountTMP;
         [SerializeField] private TextMeshProUGUI strawberryCountTMP;
 
+
+        [Header("-- Dice Menu --")]
+        [SerializeField] private GameObject dicePanel;
+
+        [Header("-- Dice Camera --")] 
+        [SerializeField] private GameObject diceCamera;
+        [SerializeField] private GameObject diceFrame;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -30,6 +37,15 @@ namespace _GameFolders.Scripts.Managers
         {
             GameEventManager.OnStart += OnStartHandler;
             GameEventManager.UpdateInventory += OnUpdateInventoryHandler;
+            GameEventManager.OnWin += OnWinHandler;
+        }
+
+        private void OnWinHandler()
+        {
+            dicePanel.SetActive(false);
+            
+            diceCamera.SetActive(false);
+            diceFrame.SetActive(false);
         }
 
         private void OnUpdateInventoryHandler(FruitType fruitType, int startValue ,int value)
@@ -52,11 +68,15 @@ namespace _GameFolders.Scripts.Managers
         {
             GameEventManager.OnStart -= OnStartHandler;
             GameEventManager.UpdateInventory -= OnUpdateInventoryHandler;
+            GameEventManager.OnWin -= OnWinHandler;
         }
 
         private void OnStartHandler()
         {
             mainMenuPanel.SetActive(false);
+            
+            diceCamera.SetActive(true);
+            diceFrame.SetActive(true);
         }
 
         private void ButtonListenerInit()

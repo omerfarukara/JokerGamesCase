@@ -1,11 +1,11 @@
 {
   "steps": [
     {
-      "fruitType": 0,
+      "fruitType": 1,
       "count": 50
     },
     {
-      "fruitType": 1,
+      "fruitType": 3,
       "count": 150
     },
     {
@@ -17,16 +17,28 @@
       "count": 338
     },
     {
-      "fruitType": 0,
+      "fruitType": 3,
       "count": 46
     },
     {
-      "fruitType": 2,
-      "count": 57
+      "fruitType": 0,
+      "count": 0
     },
     {
       "fruitType": 1,
       "count": 100
+    },
+    {
+      "fruitType": 2,
+      "count": 62
+    },
+    {
+      "fruitType": 3,
+      "count": 51
+    },
+    {
+      "fruitType": 1,
+      "count": 8
     }
   ]
 }

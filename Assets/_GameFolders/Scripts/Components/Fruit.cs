@@ -10,15 +10,18 @@ namespace _GameFolders.Scripts.Components
         [SerializeField] private Image fruitImage;
         [SerializeField] private TextMeshProUGUI countTmp;
 
-        private FruitType _fruitType;
+        public FruitType FruitType { get; set; }
+        public int Count { get; set; }
 
         public void Init(Sprite fruitSprite, FruitType fruitType, int fruitCount)
         {
-            transform.localPosition = Vector3.right * transform.GetSiblingIndex() * 2;
-            
-            countTmp.text = $"{fruitCount}";
+            transform.localPosition = Vector3.right * transform.GetSiblingIndex() * 3;
+
+            FruitType = fruitType;
+            Count = fruitCount;
+
             fruitImage.sprite = fruitSprite;
-            _fruitType = fruitType;
+            countTmp.text = $"{(fruitType != FruitType.Empty ? Count : "---")}";
         }
     }
 }

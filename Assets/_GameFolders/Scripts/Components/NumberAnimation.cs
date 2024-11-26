@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Threading.Tasks;
 using _GameFolders.Scripts.Helpers;
-using _GameFolders.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 

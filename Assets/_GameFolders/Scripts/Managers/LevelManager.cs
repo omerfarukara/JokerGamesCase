@@ -13,12 +13,16 @@ namespace _GameFolders.Scripts.Managers
         private Transform stepsParent;
 
         [SerializeField] private Fruit fruitObject;
+        [SerializeField] private Sprite emptySprite;
         [SerializeField] private Sprite appleSprite;
         [SerializeField] private Sprite pearSprite;
         [SerializeField] private Sprite strawberrySprite;
 
         [Header("-- Json File --")] [SerializeField]
         private TextAsset levelJson;
+
+
+        public int AllStepCountInLevel { get; set; }
 
         private void OnEnable()
         {
@@ -33,18 +37,24 @@ namespace _GameFolders.Scripts.Managers
         private async void OnStartHandler()
         {
             await Task.Delay(100);
+            
             Level level = JsonUtility.FromJson<Level>(levelJson.text);
-            for (var index = 0; index < level.steps.Count; index++)
+
+            AllStepCountInLevel = level.steps.Count;
+            
+            
+            for (var index = 0; index < AllStepCountInLevel; index++)
             {
                 StepObject stepObject = level.steps[index];
-
-                Debug.Log($"Fruit Type {stepObject.fruitType} \n Fruit Count {stepObject.count}");
 
                 Fruit spawnFruit = Instantiate(fruitObject, stepsParent).GetComponent<Fruit>();
                 FruitType fruitType = (FruitType)stepObject.fruitType;
 
                 switch (fruitType)
                 {
+                    case FruitType.Empty:
+                        spawnFruit.Init(emptySprite, fruitType, stepObject.count);
+                        break;
                     case FruitType.Apple:
                         spawnFruit.Init(appleSprite, fruitType, stepObject.count);
                         break;
