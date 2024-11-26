@@ -15,7 +15,7 @@ namespace _GameFolders.Scripts.Managers
         public void RollDice()
         {
             if (firstDice.IsRolling ||
-                secondDice.IsRolling || 
+                secondDice.IsRolling ||
                 GameManager.Instance.GameState == GameState.Win ||
                 PlayerController.Instance.IsGoing) return;
 
@@ -26,6 +26,8 @@ namespace _GameFolders.Scripts.Managers
         {
             int firstDiceValue = int.Parse(firstDiceInputField.text);
             int secondDiceValue = int.Parse(secondDiceInputField.text);
+
+            if (!AcceptableDiceValue(firstDiceValue) || !AcceptableDiceValue(secondDiceValue)) return;
 
             firstDice.SelectNumberAndRoll(firstDiceValue);
             secondDice.SelectNumberAndRoll(secondDiceValue);
@@ -44,6 +46,11 @@ namespace _GameFolders.Scripts.Managers
             {
                 await Task.Yield();
             }
+        }
+
+        private bool AcceptableDiceValue(int value)
+        {
+            return value is > 0 and < 7;
         }
     }
 }

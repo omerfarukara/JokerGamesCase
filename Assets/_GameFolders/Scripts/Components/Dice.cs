@@ -33,12 +33,6 @@ namespace _GameFolders.Scripts.Components
 
         private async void RollDice()
         {
-            if (selectedNumber < 1 || selectedNumber > 6)
-            {
-                Debug.LogError("Lütfen 1 ile 6 arasında bir sayı seçiniz.");
-                return;
-            }
-
             if (_isRolling)
             {
                 Debug.Log("Zar şu anda atılıyor, lütfen bekleyin.");
