@@ -15,5 +15,14 @@ namespace _GameFolders.Scripts.Helpers
             public const string Jump = "Jump";
             public const string Dance = "Dance";
         }
+
+        public static class Tags
+        {
+            public const string Ground = "Ground";
+        }
+        public static class SceneNames
+        {
+            public const string GameScene = "GameScene";
+        }
     }
 }

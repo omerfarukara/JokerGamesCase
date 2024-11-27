@@ -151,7 +151,7 @@ namespace _GameFolders.Scripts.Controllers
         {
             StopMoveAndJump();
 
-            await Task.Delay(2000); // Win Effect Duration -- Coming soon VFX
+            await Task.Delay(1000);
 
             JumpAnimationCommand jumpAnimation = new JumpAnimationCommand(this, jumpForce);
             MoveAnimationCommand moveAnimation = new MoveAnimationCommand(this, position, moveDuration, isLocalMove);

@@ -1,6 +1,6 @@
-using System;
 using _GameFolders.Scripts.Helpers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _GameFolders.Scripts.Managers
 {
@@ -8,7 +8,7 @@ namespace _GameFolders.Scripts.Managers
     {
         public GameState GameState { get; set; } = GameState.InGame;
 
-        [SerializeField] private ParticleSystem conffectiParticleSystem;
+        [SerializeField] private ParticleSystem confettiParticleSystem;
 
         private void OnEnable()
         {
@@ -22,7 +22,12 @@ namespace _GameFolders.Scripts.Managers
 
         private void OnWinHandler()
         {
-            conffectiParticleSystem.Play();
+            confettiParticleSystem.Play();
+        }
+
+        public void ResetScene()
+        {
+            SceneManager.LoadScene(Constants.SceneNames.GameScene);
         }
     }
 }

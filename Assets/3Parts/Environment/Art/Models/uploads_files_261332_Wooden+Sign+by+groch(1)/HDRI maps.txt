@@ -1,9 +1,0 @@
-For renders I have used HDRI map. I cannot resell that map, but you can download it for free from here:
-
-http://hdrmaps.com/freebies/golden-autumn-road
-
-In "Blender Nodes Settings" there are settings for that particular map and for results from my renders.
-
-Tweak these settings for your own needs.
-
-Enjoy!

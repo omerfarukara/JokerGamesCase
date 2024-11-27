@@ -1,5 +1,4 @@
-﻿using System;
-using _GameFolders.Scripts.Components;
+﻿using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
 using TMPro;
 using UnityEngine;

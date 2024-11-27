@@ -1,5 +1,0 @@
-Wood textures and material comes from:
-
-http://www.chocofur.com/
-
-You can get a lot more free Blender shaders and textures from that awesome site. :)

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using _GameFolders.Scripts.Helpers;
 using UnityEngine;
 
 namespace _GameFolders.Scripts.Components
@@ -8,22 +9,27 @@ namespace _GameFolders.Scripts.Components
     {
         [SerializeField] private Rigidbody diceRigidbody;
         [SerializeField] private float throwForce = 10f;
-        [SerializeField] private Vector3[] diceFaces = 
+
+        [SerializeField] private Vector3[] diceFaces =
         {
-            new Vector3(180, 0, 0),
-            new Vector3(-90, 0, 0),
-            new Vector3(0, 0, -90),
-            new Vector3(0, 0, 90),
-            new Vector3(90, 0, 0),
-            new Vector3(0, 0, 0)
+            new (180, 0, 0),
+            new (-90, 0, 0),
+            new (0, 0, -90),
+            new (0, 0, 90),
+            new (90, 0, 0),
+            new (0, 0, 0)
         };
 
         [SerializeField] private float settleDelay = 2f;
         [SerializeField] private int selectedNumber = 1;
         [SerializeField] private float rotationLerpSpeed = 5f;
+        [SerializeField] private float bounceForce = 2f;
 
         private bool _isRolling;
         public bool IsRolling => _isRolling;
+
+        private bool _hasBounced;
+        private bool _isLastRotate;
 
         private void Start()
         {
@@ -40,6 +46,7 @@ namespace _GameFolders.Scripts.Components
             }
 
             _isRolling = true;
+            _hasBounced = false;
 
             await RollDiceAsync(selectedNumber);
 
@@ -48,22 +55,30 @@ namespace _GameFolders.Scripts.Components
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (diceRigidbody && diceRigidbody.velocity.y < -7)
             {
-                RollDice();
+                diceRigidbody.velocity = new Vector2(diceRigidbody.velocity.x, -7);
+            }
+
+            if (_hasBounced && diceRigidbody.velocity.y < 0)
+            {
+                _isLastRotate = true;
             }
         }
 
         private async Task RollDiceAsync(int number)
         {
             ThrowDice();
-        
+
             await Task.Delay(TimeSpan.FromSeconds(settleDelay));
 
+            while (!_isLastRotate)
+            {
+                await Task.Yield();
+            }
+
             diceRigidbody.isKinematic = true;
-
             await RotateToTargetFaceAsync(number);
-
             diceRigidbody.isKinematic = false;
         }
 
@@ -96,6 +111,17 @@ namespace _GameFolders.Scripts.Components
                 );
 
                 await Task.Yield();
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!_hasBounced && collision.gameObject.CompareTag(Constants.Tags.Ground))
+            {
+                diceRigidbody.isKinematic = false;
+                diceRigidbody.velocity = Vector3.zero;
+                diceRigidbody.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+                _hasBounced = true;
             }
         }
 

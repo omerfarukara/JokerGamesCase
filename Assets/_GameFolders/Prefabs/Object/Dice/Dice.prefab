@@ -59,6 +59,7 @@ MonoBehaviour:
   settleDelay: 2
   selectedNumber: 1
   rotationLerpSpeed: 60
+  bounceForce: 2
 --- !u!65 &7677667761096841193
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -40,7 +40,6 @@ namespace _GameFolders.Scripts.ObjectAnimationSystem
 
             if (_duration <= 0)
             {
-                Debug.LogError("Duration must be greater than zero.");
                 return;
             }
 
@@ -53,7 +52,6 @@ namespace _GameFolders.Scripts.ObjectAnimationSystem
             {
                 if (_moveObject.MoveCancellationTokenSource.IsCancellationRequested)
                 {
-                    Debug.Log("Animation cancelled.");
                     return;
                 }
 
