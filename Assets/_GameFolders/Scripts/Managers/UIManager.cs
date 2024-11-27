@@ -33,12 +33,7 @@ namespace _GameFolders.Scripts.Managers
         [SerializeField] private GameObject bonusDiceFrame;
 
 
-        protected override void Awake()
-        {
-            base.Awake();
-            ButtonListenerInit();
-        }
-
+        
         private void OnEnable()
         {
             GameEventManager.OnStart += OnStartHandler;
@@ -46,6 +41,21 @@ namespace _GameFolders.Scripts.Managers
             GameEventManager.OnWin += OnWinHandler;
             GameEventManager.RollDiceStart += OnRollDiceStartHandler;
             GameEventManager.RollDiceEnd += OnRollDiceEndHandler;
+        }
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            ButtonListenerInit();
+        }
+        
+        private void OnDisable()
+        {
+            GameEventManager.OnStart -= OnStartHandler;
+            GameEventManager.UpdateInventory -= OnUpdateInventoryHandler;
+            GameEventManager.OnWin -= OnWinHandler;
+            GameEventManager.RollDiceStart -= OnRollDiceStartHandler;
+            GameEventManager.RollDiceEnd -= OnRollDiceEndHandler;
         }
 
         private void OnRollDiceEndHandler(RollDiceType rollDiceType)
@@ -99,14 +109,7 @@ namespace _GameFolders.Scripts.Managers
             }
         }
 
-        private void OnDisable()
-        {
-            GameEventManager.OnStart -= OnStartHandler;
-            GameEventManager.UpdateInventory -= OnUpdateInventoryHandler;
-            GameEventManager.OnWin -= OnWinHandler;
-            GameEventManager.RollDiceStart -= OnRollDiceStartHandler;
-            GameEventManager.RollDiceEnd -= OnRollDiceEndHandler;
-        }
+
 
         private void OnStartHandler()
         {
