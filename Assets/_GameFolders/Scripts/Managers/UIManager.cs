@@ -9,31 +9,28 @@ namespace _GameFolders.Scripts.Managers
 {
     public class UIManager : MonoSingleton<UIManager>
     {
-        [Header("-- Main Menu --")] [SerializeField]
-        private GameObject mainMenuPanel;
-
+        [Header("-- Main Menu --")]
+        [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private Button startButton;
 
-        [Header("-- Inventory Menu --")] [SerializeField]
-        private TextMeshProUGUI appleCountTMP;
-
+        [Header("-- Inventory Menu --")]
+        [SerializeField] private TextMeshProUGUI appleCountTMP;
         [SerializeField] private TextMeshProUGUI pearCountTMP;
         [SerializeField] private TextMeshProUGUI strawberryCountTMP;
 
-
-        [Header("{-- Normal Dice Variables --}")] [SerializeField]
-        private GameObject dicePanel;
-
+        [Header("{-- Normal Dice Variables --}")]
+        [SerializeField] private GameObject dicePanel;
         [SerializeField] private GameObject diceCamera;
         [SerializeField] private GameObject diceFrame;
 
-        [Header("{-- Bonus Dice Variables --}")] [SerializeField]
-        private GameObject bonusDiceCamera;
-
+        [Header("{-- Bonus Dice Variables --}")]
+        [SerializeField] private GameObject bonusPanel;
+        [SerializeField] private GameObject bonusDiceCamera;
         [SerializeField] private GameObject bonusDiceFrame;
-
-
         
+        [Header("{-- Win Panel --}")]
+        [SerializeField] private GameObject winPanel;
+
         private void OnEnable()
         {
             GameEventManager.OnStart += OnStartHandler;
@@ -91,6 +88,9 @@ namespace _GameFolders.Scripts.Managers
         private void OnWinHandler()
         {
             dicePanel.SetActive(false);
+            
+            winPanel.SetActive(true);
+            bonusPanel.SetActive(false);
         }
 
         private void OnUpdateInventoryHandler(FruitType fruitType, int startValue, int value)
