@@ -1,4 +1,5 @@
-﻿using _GameFolders.Scripts.Components;
+﻿using System;
+using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
@@ -20,13 +21,18 @@ namespace _GameFolders.Scripts.Managers
         [SerializeField] private TextMeshProUGUI strawberryCountTMP;
 
 
-        [Header("-- Dice Menu --")]
-        [SerializeField] private GameObject dicePanel;
+        [Header("{-- Normal Dice Variables --}")] [SerializeField]
+        private GameObject dicePanel;
 
-        [Header("-- Dice Camera --")] 
         [SerializeField] private GameObject diceCamera;
         [SerializeField] private GameObject diceFrame;
-        
+
+        [Header("{-- Bonus Dice Variables --}")] [SerializeField]
+        private GameObject bonusDiceCamera;
+
+        [SerializeField] private GameObject bonusDiceFrame;
+
+
         protected override void Awake()
         {
             base.Awake();
@@ -38,17 +44,46 @@ namespace _GameFolders.Scripts.Managers
             GameEventManager.OnStart += OnStartHandler;
             GameEventManager.UpdateInventory += OnUpdateInventoryHandler;
             GameEventManager.OnWin += OnWinHandler;
+            GameEventManager.RollDiceStart += OnRollDiceStartHandler;
+            GameEventManager.RollDiceEnd += OnRollDiceEndHandler;
+        }
+
+        private void OnRollDiceEndHandler(RollDiceType rollDiceType)
+        {
+            switch (rollDiceType)
+            {
+                case RollDiceType.Normal:
+                    diceCamera.SetActive(false);
+                    diceFrame.SetActive(false);
+                    break;
+                case RollDiceType.Bonus:
+                    bonusDiceCamera.SetActive(false);
+                    bonusDiceFrame.SetActive(false);
+                    break;
+            }
+        }
+
+        private void OnRollDiceStartHandler(RollDiceType rollDiceType)
+        {
+            switch (rollDiceType)
+            {
+                case RollDiceType.Normal:
+                    diceCamera.SetActive(true);
+                    diceFrame.SetActive(true);
+                    break;
+                case RollDiceType.Bonus:
+                    bonusDiceCamera.SetActive(true);
+                    bonusDiceFrame.SetActive(true);
+                    break;
+            }
         }
 
         private void OnWinHandler()
         {
             dicePanel.SetActive(false);
-            
-            diceCamera.SetActive(false);
-            diceFrame.SetActive(false);
         }
 
-        private void OnUpdateInventoryHandler(FruitType fruitType, int startValue ,int value)
+        private void OnUpdateInventoryHandler(FruitType fruitType, int startValue, int value)
         {
             switch (fruitType)
             {
@@ -59,7 +94,7 @@ namespace _GameFolders.Scripts.Managers
                     NumberAnimation.Instance.Animate(pearCountTMP, startValue, value);
                     break;
                 case FruitType.Strawberry:
-                    NumberAnimation.Instance.Animate(strawberryCountTMP, startValue , value);
+                    NumberAnimation.Instance.Animate(strawberryCountTMP, startValue, value);
                     break;
             }
         }
@@ -69,14 +104,13 @@ namespace _GameFolders.Scripts.Managers
             GameEventManager.OnStart -= OnStartHandler;
             GameEventManager.UpdateInventory -= OnUpdateInventoryHandler;
             GameEventManager.OnWin -= OnWinHandler;
+            GameEventManager.RollDiceStart -= OnRollDiceStartHandler;
+            GameEventManager.RollDiceEnd -= OnRollDiceEndHandler;
         }
 
         private void OnStartHandler()
         {
             mainMenuPanel.SetActive(false);
-            
-            diceCamera.SetActive(true);
-            diceFrame.SetActive(true);
         }
 
         private void ButtonListenerInit()

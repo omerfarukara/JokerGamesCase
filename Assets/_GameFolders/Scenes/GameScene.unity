@@ -182,6 +182,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2213556634114503239, guid: 33919c9c740abe24492eb94e66f618cc, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5952370954698058480, guid: 33919c9c740abe24492eb94e66f618cc, type: 3}
       propertyPath: m_Name
       value: Second Dice
@@ -425,6 +429,104 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 317533025}
+--- !u!1 &463226781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 463226782}
+  - component: {fileID: 463226784}
+  - component: {fileID: 463226785}
+  m_Layer: 0
+  m_Name: Bonus Dice Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &463226782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463226781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.37048808, y: -0.15650183, z: 0.05922849, w: 0.91363984}
+  m_LocalPosition: {x: -2.68, y: 13.52, z: 17.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1746213912}
+  m_LocalEulerAnglesHint: {x: 44.069, y: -19.69, z: -0.617}
+--- !u!20 &463226784
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463226781}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 15.3
+  orthographic: 1
+  orthographic size: 1.14
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: 39d148da634cb194694570bb93af02b9, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &463226785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463226781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e30af534e6972418642e65c8822c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAtDice: {fileID: 0}
+  offset: {x: -0.81, y: 0.12, z: 0}
 --- !u!1 &490432669
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,23 +609,14 @@ GameObject:
   m_Component:
   - component: {fileID: 527618976}
   - component: {fileID: 527618975}
-  - component: {fileID: 527618974}
   - component: {fileID: 527618977}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Dice Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!81 &527618974
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527618972}
-  m_Enabled: 1
+  m_IsActive: 1
 --- !u!20 &527618975
 Camera:
   m_ObjectHideFlags: 0
@@ -602,7 +695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e30af534e6972418642e65c8822c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dice: {fileID: 900045440}
+  lookAtDice: {fileID: 900045440}
   offset: {x: 0.63, y: 0, z: 0}
 --- !u!1 &649314493
 GameObject:
@@ -816,81 +909,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
---- !u!1 &878711777
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 878711778}
-  - component: {fileID: 878711780}
-  - component: {fileID: 878711779}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &878711778
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878711777}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1402869582}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &878711779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878711777}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &878711780
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878711777}
-  m_CullTransparentMesh: 1
 --- !u!1001 &900045439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -899,6 +917,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2213556634114503239, guid: 33919c9c740abe24492eb94e66f618cc, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5952370954698058480, guid: 33919c9c740abe24492eb94e66f618cc, type: 3}
       propertyPath: m_Name
       value: First Dice
@@ -1289,6 +1311,17 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
+--- !u!114 &1357195706 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6429248832010261750, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
+  m_PrefabInstance: {fileID: 2575737421320836305}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1357322470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,6 +1370,11 @@ MonoBehaviour:
   secondDice: {fileID: 137859741}
   firstDiceInputField: {fileID: 1628695289}
   secondDiceInputField: {fileID: 1925894211}
+  bonusDice: {fileID: 8498046128266448202, guid: 33919c9c740abe24492eb94e66f618cc, type: 3}
+  bonusDiceParent: {fileID: 1574890386}
+  bonusDropdown: {fileID: 1357195706}
+  normalDiceCameraManager: {fileID: 527618977}
+  bonusDiceCameraManager: {fileID: 463226785}
 --- !u!1 &1394665062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,108 +1447,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1250789149}
---- !u!1 &1402869578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1402869582}
-  - component: {fileID: 1402869581}
-  - component: {fileID: 1402869580}
-  - component: {fileID: 1402869579}
-  m_Layer: 5
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1402869579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402869578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &1402869580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402869578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &1402869581
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402869578}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 963194227}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!224 &1402869582
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402869578}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 878711778}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1574890385
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,7 +1457,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1574890386}
   m_Layer: 0
-  m_Name: Dice Parent
+  m_Name: Bnous Dice Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1536,7 +1472,7 @@ Transform:
   m_GameObject: {fileID: 1574890385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3915384, y: 4.374113, z: 26.28142}
+  m_LocalPosition: {x: -6.958, y: 1.55, z: 29.191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1627,6 +1563,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 463226782}
   - {fileID: 527618976}
   - {fileID: 963194228}
   - {fileID: 423488621}
@@ -1685,6 +1622,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1529410208377181702, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529410208377181702, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 33.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529410208377181702, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.5010818
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529410208377181702, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.8653999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529410208377181702, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -240.143
+      objectReference: {fileID: 0}
     - target: {fileID: 2998988141181080323, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
       propertyPath: currentCam
       value: 
@@ -1729,6 +1686,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3985675272706747633, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985675272706747633, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 34.97
+      objectReference: {fileID: 0}
     - target: {fileID: 4390965381974924145, guid: aa3749908fcff9e4d8f2b71c630bdda5, type: 3}
       propertyPath: m_Name
       value: --------Environment---------
@@ -1764,14 +1729,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
-    - target: {fileID: 940272738393088055, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
-      propertyPath: diceCamera
-      value: 
-      objectReference: {fileID: 527618972}
-    - target: {fileID: 3095061795218806296, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -110.79999
-      objectReference: {fileID: 0}
     - target: {fileID: 3260385045776793249, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1796,6 +1753,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6429248832010261750, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1357322472}
     - target: {fileID: 6439860970159172664, guid: 36bbccf2917ad174198521eb6af8aec7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1901,9 +1862,8 @@ SceneRoots:
   - {fileID: 744300132}
   - {fileID: 2575737421320836305}
   - {fileID: 2112018860}
-  - {fileID: 649314497}
-  - {fileID: 1071100495}
-  - {fileID: 1574890386}
   - {fileID: 900045439}
   - {fileID: 137859740}
-  - {fileID: 1402869582}
+  - {fileID: 1071100495}
+  - {fileID: 649314497}
+  - {fileID: 1574890386}

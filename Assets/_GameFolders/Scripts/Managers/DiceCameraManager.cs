@@ -5,12 +5,21 @@ namespace _GameFolders.Scripts.Managers
 {
     public class DiceCameraManager : MonoBehaviour
     {
-        [SerializeField] private Dice dice;
+        [SerializeField] private Dice lookAtDice;
         [SerializeField] private Vector3 offset;
+
+        public Dice LookAtDice
+        {
+            get => lookAtDice;
+            set => lookAtDice = value;
+        }
 
         private void Update()
         {
-            transform.LookAt(dice.transform.position+offset,transform.up);
+            if (LookAtDice != null)
+            {
+                transform.LookAt(LookAtDice.transform.position + offset, transform.up);
+            }
         }
     }
 }

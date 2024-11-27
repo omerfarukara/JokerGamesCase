@@ -20,4 +20,10 @@ namespace _GameFolders.Scripts.Helpers
         InGame = 0,
         Win = 1
     }
+    
+    public enum RollDiceType
+    {
+        Normal = 0,
+        Bonus = 1
+    }
 }

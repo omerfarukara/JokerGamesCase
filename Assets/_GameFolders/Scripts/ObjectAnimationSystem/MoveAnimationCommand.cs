@@ -62,7 +62,7 @@ namespace _GameFolders.Scripts.ObjectAnimationSystem
 
                 elapsedTime += Time.deltaTime;
 
-                if (Vector3.Distance(_moveObject.MoveTransform.position, targetPosition) <= 0.05f)
+                if (Vector3.Distance(_moveObject.MoveTransform.position, targetPosition) <= 0.001f)
                 {
                     break;
                 }

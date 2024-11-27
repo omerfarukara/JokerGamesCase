@@ -11,5 +11,9 @@ namespace _GameFolders.Scripts.Managers
         
         public static Action<string> AnimatorSetTrigger { get; set; }
         public static Action<int> OnMoveTrigger { get; set; }
+        
+        public static Action<RollDiceType> RollDiceStart { get; set; }
+        public static Action<RollDiceType> RollDiceEnd { get; set; }
+        
     }
 }
