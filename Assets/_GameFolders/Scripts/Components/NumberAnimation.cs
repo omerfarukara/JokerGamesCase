@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using _GameFolders.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
@@ -12,12 +12,12 @@ namespace _GameFolders.Scripts.Components
 
         private float _elapsedTime = 0f;
 
-        public async void Animate(TextMeshProUGUI tmp, int startValue, int targetValue)
+        public void Animate(TextMeshProUGUI tmp, int startValue, int targetValue)
         {
-            await AnimateNumber(tmp, startValue, targetValue);
+            StartCoroutine(AnimateNumber(tmp, startValue, targetValue));
         }
 
-        private async Task AnimateNumber(TextMeshProUGUI tmp, int startValue, int targetValue)
+        private IEnumerator AnimateNumber(TextMeshProUGUI tmp, int startValue, int targetValue)
         {
             _elapsedTime = 0f;
 
@@ -29,7 +29,7 @@ namespace _GameFolders.Scripts.Components
                 int currentValue = Mathf.RoundToInt(Mathf.Lerp(startValue, targetValue, progress));
                 tmp.text = currentValue.ToString();
 
-                await Task.Yield();
+                yield return null;
             }
 
             tmp.text = targetValue.ToString();

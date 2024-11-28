@@ -1,6 +1,6 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
 using UnityEngine;
@@ -21,28 +21,26 @@ namespace _GameFolders.Scripts.Managers
         [Header("-- Json File --")] [SerializeField]
         private TextAsset levelJson;
 
-
-        public int AllStepCountInLevel { get; set; }
+        public int AllStepCountInLevel { get; private set; }
 
         private void OnEnable()
         {
-            GameEventManager.OnStart += OnStartHandler;
+            GameEventManager.OnStart += () => StartCoroutine(OnStartHandler());
         }
 
         private void OnDisable()
         {
-            GameEventManager.OnStart -= OnStartHandler;
+            GameEventManager.OnStart -= () => StartCoroutine(OnStartHandler());
         }
 
-        private async void OnStartHandler()
+        private IEnumerator OnStartHandler()
         {
-            await Task.Delay(100);
-            
+            yield return new WaitForSeconds(0.100f);
+
             Level level = JsonUtility.FromJson<Level>(levelJson.text);
 
             AllStepCountInLevel = level.steps.Count;
-            
-            
+
             for (var index = 0; index < AllStepCountInLevel; index++)
             {
                 StepObject stepObject = level.steps[index];
@@ -65,9 +63,8 @@ namespace _GameFolders.Scripts.Managers
                         spawnFruit.Init(strawberrySprite, fruitType, stepObject.count);
                         break;
                 }
-                
-                await Task.Delay(100);
 
+                yield return new WaitForSeconds(0.100f);
             }
         }
     }

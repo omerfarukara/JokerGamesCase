@@ -108,8 +108,6 @@ namespace _GameFolders.Scripts.Managers
             }
         }
 
-
-
         private void OnStartHandler()
         {
             mainMenuPanel.SetActive(false);

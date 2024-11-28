@@ -1,85 +1,51 @@
 using System;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections;
 using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Helpers;
-using _GameFolders.Scripts.Interfaces;
 using _GameFolders.Scripts.Managers;
-using _GameFolders.Scripts.ObjectAnimationSystem;
+using _GameFolders.Scripts.Utility;
+using UnityEngine;
 
 namespace _GameFolders.Scripts.Controllers
 {
-    public class PlayerController : MonoSingleton<PlayerController>, IMoveObject, IJumpObject, IRotationObject
+    public class PlayerController : MonoSingleton<PlayerController>
     {
-        [Header("[-- IsGround Ray Variables --]")] [Space] [SerializeField]
-        private float isGroundedRayDistance;
+        [Header("[-- Movement Variables --]")] [SerializeField]
+        private float moveDuration = 0.5f;
+
+        [Header("[-- Jump Variables --]")] [SerializeField]
+        private float jumpHeight = 2f;
+
+        [Header("[-- Rotation Variables --]")] [SerializeField]
+        private float winRotateDuration;
+
+        [SerializeField] private Vector3 winRotateLocalAngle;
+
+        [Header("[-- Ground Check Variables --]")] [SerializeField]
+        private float isGroundedRayDistance = 0.1f;
 
         [SerializeField] private LayerMask isGroundedLayerMask;
 
-        [Space] [Space] [Header("[-- Model --]")] [Space] [SerializeField]
-        private PlayerAnimatorController playerAnimatorController;
+        [Header("[-- Animator --]")] [SerializeField]
+        private Animator animator;
 
-        #region Move
-
-        public bool IsContinueMove { get; set; }
-        public Transform MoveTransform { get; set; }
-        public CancellationTokenSource MoveCancellationTokenSource { get; set; }
-
-        #endregion
-
-        #region Jump
-
-        public bool IsContinueJump { get; set; }
-        public Rigidbody Rb { get; set; }
-        public Animator AnimatorController { get; set; }
-        public CancellationTokenSource JumpCancellationTokenSource { get; set; }
-
-        #endregion
-
-        #region Rotate
-
-        public bool IsContinueRotate { get; set; }
-        public Transform RotateTransform { get; set; }
-        public CancellationTokenSource RotateCancellationTokenSource { get; set; }
-
-        #endregion
-
-        public int CurrentStepIndex { get; set; } = 0;
-        public int StartStepIndex { get; set; } = 0;
-
-        private RaycastHit _hit;
         private Vector3 _basePosition;
 
         private bool _isGrounded;
-        private bool _isGoing;
-        public bool IsGoing => _isGoing;
+        private int _currentStepIndex;
 
+        public bool IsGoing { get; private set; }
 
-        private void OnEnable()
+        private void Start()
         {
-            GameEventManager.OnMoveTrigger += OnMoveTriggerHandler;
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            
-            MoveTransform = transform;
-            RotateTransform = transform;
-
-            Rb = GetComponent<Rigidbody>();
-            AnimatorController = playerAnimatorController.Animator;
             _basePosition = transform.position;
         }
-        
 
         private void OnCollisionEnter(Collision other)
         {
             if (other.transform.TryGetComponent(out Fruit fruit))
             {
-                if (_isGoing) return;
+                if (IsGoing) return;
 
                 switch (fruit.FruitType)
                 {
@@ -100,136 +66,129 @@ namespace _GameFolders.Scripts.Controllers
         {
             CheckIfGrounded();
         }
-        
-        private void OnMoveTriggerHandler(int stepCount)
+
+        private void OnEnable()
         {
-            StepMove(stepCount, Vector3.forward * 3, 0.8f, 225, true).ConfigureAwait(true);
+            GameEventManager.OnMoveTrigger += OnMoveTriggerHandler;
         }
-
-        private async Task StepMove(int stepCount, Vector3 position, float moveDuration, float jumpForce, bool isLocalMove)
-        {
-            if (IsContinueJump || IsContinueMove) return;
-
-            _isGoing = true;
-            StartStepIndex = CurrentStepIndex;
-            
-            for (int i = 0; i < stepCount; i++)
-            {
-                JumpAnimationCommand jumpAnimation = new JumpAnimationCommand(this, jumpForce);
-                MoveAnimationCommand moveAnimation = new MoveAnimationCommand(this, position, moveDuration, isLocalMove, () => CurrentStepIndex++);
-
-                await ObjectAnimation.Instance.ExecuteAnimationsAsync(new List<IAnimation>() { jumpAnimation, moveAnimation });
-
-                await WaitForJumpToLand();
-
-                if (CheckReturnBase())
-                {
-                    int temporaryIndex = StartStepIndex + stepCount;
-                    await ReturnBase(0.8f, 225, false, () => { StepMove(temporaryIndex - LevelManager.Instance.AllStepCountInLevel, Vector3.forward * 3, 0.8f, 225, true).ConfigureAwait(true); }).ConfigureAwait(true);
-                }
-                else if (i == stepCount - 1)
-                {
-                    _isGoing = false;
-
-                    if (CheckWin())
-                    {
-                        GameManager.Instance.GameState = GameState.Win;
-                        await WinMoveAndRotate(Vector3.forward * 3, 0.8f, 225f, new Vector3(0, 55, 0), 1, true).ConfigureAwait(true);
-                    }
-                }
-
-
-                if (MoveCancellationTokenSource.IsCancellationRequested || JumpCancellationTokenSource.IsCancellationRequested)
-                {
-                    _isGoing = false;
-                    break;
-                }
-            }
-        }
-
-        private async Task WinMoveAndRotate(Vector3 position, float moveDuration, float jumpForce, Vector3 localRotate, int rotateDuration, bool isLocalMove)
-        {
-            StopMoveAndJump();
-
-            await Task.Delay(1000);
-
-            JumpAnimationCommand jumpAnimation = new JumpAnimationCommand(this, jumpForce);
-            MoveAnimationCommand moveAnimation = new MoveAnimationCommand(this, position, moveDuration, isLocalMove);
-            RotateAnimationCommand rotateCommand = new RotateAnimationCommand(this, localRotate, rotateDuration);
-
-            await ObjectAnimation.Instance.ExecuteAnimationsAsync(new List<IAnimation>() { jumpAnimation, moveAnimation, rotateCommand });
-            await WaitForJumpToLand();
-
-            GameEventManager.OnWin?.Invoke();
-            GameEventManager.AnimatorSetTrigger?.Invoke(Constants.Animation.Dance);
-        }
-
-        private async Task ReturnBase(float moveDuration, float jumpForce, bool isLocalMove, Action newLapStepAction)
-        {
-            StopMoveAndJump();
-
-            CurrentStepIndex = 0;
-
-            JumpAnimationCommand jumpAnimation = new JumpAnimationCommand(this, jumpForce);
-            MoveAnimationCommand moveAnimation = new MoveAnimationCommand(this, _basePosition, moveDuration, isLocalMove, () =>
-            {
-                StopMoveAndJump();
-                newLapStepAction?.Invoke();
-            });
-
-            await ObjectAnimation.Instance.ExecuteAnimationsAsync(new List<IAnimation>() { jumpAnimation, moveAnimation });
-        }
-
-
-        #region Helper Methods
-
-        private async Task WaitForJumpToLand()
-        {
-            while (!_isGrounded)
-            {
-                await Task.Yield();
-            }
-        }
-
-        private void CheckIfGrounded()
-        {
-            Physics.Raycast(transform.position, Vector3.down, out _hit, isGroundedRayDistance, isGroundedLayerMask);
-            _isGrounded = _hit.collider != null;
-        }
-
-        private bool CheckWin()
-        {
-            return CurrentStepIndex == LevelManager.Instance.AllStepCountInLevel;
-        }
-
-        private bool CheckReturnBase()
-        {
-            return CurrentStepIndex > LevelManager.Instance.AllStepCountInLevel;
-        }
-
-        private void StopMoveAndJump()
-        {
-            MoveCancellationTokenSource?.Cancel();
-            JumpCancellationTokenSource?.Cancel();
-
-            MoveCancellationTokenSource = null;
-            JumpCancellationTokenSource = null;
-
-            IsContinueMove = false;
-            IsContinueJump = false;
-        }
-
-        #endregion
 
         private void OnDisable()
         {
             GameEventManager.OnMoveTrigger -= OnMoveTriggerHandler;
+        }
 
-            MoveCancellationTokenSource?.Cancel();
-            JumpCancellationTokenSource?.Cancel();
+        private void OnMoveTriggerHandler(int stepCount)
+        {
+            if (!IsGoing)
+            {
+                StartCoroutine(HandleMovement(stepCount));
+            }
+        }
 
-            MoveCancellationTokenSource?.Dispose();
-            JumpCancellationTokenSource?.Dispose();
+        private IEnumerator HandleMovement(int stepCount)
+        {
+            IsGoing = true;
+
+            for (int i = 0; i < stepCount; i++)
+            {
+                Vector3 targetPosition = GetNormalStep();
+
+                yield return MovementUtility.JumpMove(
+                    transform,
+                    targetPosition,
+                    moveDuration,
+                    jumpHeight,
+                    onStart: JumpAnimation(),
+                    onComplete: null
+                );
+
+                _currentStepIndex++;
+                
+                if (i == stepCount - 1) // Is Last Jump
+                {
+                    IsGoing = false;
+                }
+
+                yield return new WaitUntil(() => _isGrounded);
+
+                if (ReturnBase())
+                {
+                    yield return MovementUtility.JumpMove(
+                        transform,
+                        _basePosition,
+                        moveDuration * 2,
+                        jumpHeight * 1.5f,
+                        onStart: JumpAnimation(),
+                        onComplete: null
+                    );
+
+                    _currentStepIndex = 0;
+                    i--;
+                }
+            }
+
+            if (IsLevelCompleted())
+            {
+                yield return HandleWin();
+            }
+        }
+
+        private IEnumerator HandleWin()
+        {
+            yield return new WaitForSeconds(1f);
+
+            GameManager.Instance.GameState = GameState.Win;
+
+            Vector3 winPosition = GetNormalStep();
+            yield return MovementUtility.JumpMove(
+                transform,
+                winPosition,
+                moveDuration,
+                jumpHeight,
+                onStart: JumpAnimation(),
+                onComplete: null
+            );
+
+            yield return RotationUtility.RotateOverTime(
+                transform,
+                winRotateLocalAngle,
+                winRotateDuration,
+                onStart: null,
+                onComplete: null
+            );
+
+            GameEventManager.OnWin?.Invoke();
+            animator.SetTrigger(Constants.Animation.Dance);
+        }
+
+        private IEnumerator JumpAnimation()
+        {
+            animator.SetTrigger(Constants.Animation.Jump);
+            yield return new WaitForSeconds(0.750f);
+        }
+
+        private void CheckIfGrounded()
+        {
+            _isGrounded = Physics.Raycast(transform.position, Vector3.down, isGroundedRayDistance, isGroundedLayerMask);
+        }
+
+        private Vector3 GetNormalStep()
+        {
+            return new Vector3(
+                Mathf.Round(transform.position.x + transform.forward.x * 3),
+                transform.position.y,
+                Mathf.Round(transform.position.z + transform.forward.z * 3)
+            );
+        }
+
+        private bool ReturnBase()
+        {
+            return _currentStepIndex > LevelManager.Instance.AllStepCountInLevel;
+        }
+
+        private bool IsLevelCompleted()
+        {
+            return _currentStepIndex == LevelManager.Instance.AllStepCountInLevel;
         }
     }
 }

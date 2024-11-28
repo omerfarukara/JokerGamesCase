@@ -30,7 +30,7 @@ namespace _GameFolders.Scripts.Managers
             ChangeCamera(VirtualCameraType.Win);
         }
 
-        public void ChangeCamera(VirtualCameraType virtualCameraType)
+        private void ChangeCamera(VirtualCameraType virtualCameraType)
         {
             canvasVirtualCamera.Priority = virtualCameraType == VirtualCameraType.Canvas ? 1 : 0;
             defaultVirtualCamera.Priority = virtualCameraType == VirtualCameraType.Default ? 1 : 0;

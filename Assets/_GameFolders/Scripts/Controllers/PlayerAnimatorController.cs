@@ -6,7 +6,6 @@ namespace _GameFolders.Scripts.Controllers
     public class PlayerAnimatorController : MonoBehaviour
     {
         private Animator _animator;
-        public Animator Animator => _animator;
         
         private void OnEnable()
         {
@@ -25,7 +24,7 @@ namespace _GameFolders.Scripts.Controllers
 
         private void AnimatorSetTriggerHandler(string param)
         {
-            Animator.SetTrigger(param);
+            _animator.SetTrigger(param);
         }
     }
 }

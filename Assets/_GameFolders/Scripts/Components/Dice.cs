@@ -1,5 +1,4 @@
-using System;
-using System.Threading.Tasks;
+using System.Collections;
 using _GameFolders.Scripts.Helpers;
 using UnityEngine;
 
@@ -7,17 +6,16 @@ namespace _GameFolders.Scripts.Components
 {
     public class Dice : MonoBehaviour
     {
-        [SerializeField] private Rigidbody diceRigidbody;
         [SerializeField] private float throwForce = 10f;
 
         [SerializeField] private Vector3[] diceFaces =
         {
-            new (180, 0, 0),
-            new (-90, 0, 0),
-            new (0, 0, -90),
-            new (0, 0, 90),
-            new (90, 0, 0),
-            new (0, 0, 0)
+            new(180, 0, 0),
+            new(-90, 0, 0),
+            new(0, 0, -90),
+            new(0, 0, 90),
+            new(90, 0, 0),
+            new(0, 0, 0)
         };
 
         [SerializeField] private float settleDelay = 2f;
@@ -25,79 +23,76 @@ namespace _GameFolders.Scripts.Components
         [SerializeField] private float rotationLerpSpeed = 5f;
         [SerializeField] private float bounceForce = 2f;
 
+        private Rigidbody _diceRb;
+
         private bool _isRolling;
         public bool IsRolling => _isRolling;
 
         private bool _hasBounced;
         private bool _isLastRotate;
 
-        private void Start()
+        private void Awake()
         {
-            if (diceRigidbody == null)
-                diceRigidbody = GetComponent<Rigidbody>();
+            _diceRb = GetComponent<Rigidbody>();
         }
 
-        private async void RollDice()
+        private void RollDice()
         {
             if (_isRolling)
             {
-                Debug.Log("Zar şu anda atılıyor, lütfen bekleyin.");
                 return;
             }
 
             _isRolling = true;
             _hasBounced = false;
 
-            await RollDiceAsync(selectedNumber);
-
-            _isRolling = false;
+            StartCoroutine(RollDiceAsync(selectedNumber));
         }
 
         private void Update()
         {
-            if (diceRigidbody && diceRigidbody.velocity.y < -7)
+            if (_diceRb && _diceRb.velocity.y < -7)
             {
-                diceRigidbody.velocity = new Vector2(diceRigidbody.velocity.x, -7);
+                _diceRb.velocity = new Vector2(_diceRb.velocity.x, -7);
             }
 
-            if (_hasBounced && diceRigidbody.velocity.y < 0)
+            if (_hasBounced && _diceRb.velocity.y < 0)
             {
                 _isLastRotate = true;
             }
         }
 
-        private async Task RollDiceAsync(int number)
+        private IEnumerator RollDiceAsync(int number)
         {
             ThrowDice();
 
-            await Task.Delay(TimeSpan.FromSeconds(settleDelay));
+            yield return new WaitForSeconds(settleDelay);
+            yield return new WaitUntil(() => _isLastRotate);
 
-            while (!_isLastRotate)
-            {
-                await Task.Yield();
-            }
 
-            diceRigidbody.isKinematic = true;
-            await RotateToTargetFaceAsync(number);
-            diceRigidbody.isKinematic = false;
+            _diceRb.isKinematic = true;
+            yield return RotateToTargetFace(number);
+            _diceRb.isKinematic = false;
+            
+            _isRolling = false;
         }
 
         private void ThrowDice()
         {
-            diceRigidbody.isKinematic = false;
-            transform.rotation = UnityEngine.Random.rotation;
+            _diceRb.isKinematic = false;
+            transform.rotation = Random.rotation;
 
             Vector3 randomTorque = new Vector3(
-                UnityEngine.Random.Range(-10f, 10f),
-                UnityEngine.Random.Range(-10f, 10f),
-                UnityEngine.Random.Range(-10f, 10f)
+                Random.Range(-10f, 10f),
+                Random.Range(-10f, 10f),
+                Random.Range(-10f, 10f)
             );
 
-            diceRigidbody.AddTorque(randomTorque, ForceMode.Impulse);
-            diceRigidbody.AddForce(Vector3.up * throwForce, ForceMode.Impulse);
+            _diceRb.AddTorque(randomTorque, ForceMode.Impulse);
+            _diceRb.AddForce(Vector3.up * throwForce, ForceMode.Impulse);
         }
 
-        private async Task RotateToTargetFaceAsync(int number)
+        private IEnumerator RotateToTargetFace(int number)
         {
             Vector3 targetRotationEuler = diceFaces[number - 1];
             Quaternion targetRotation = Quaternion.Euler(targetRotationEuler);
@@ -110,7 +105,7 @@ namespace _GameFolders.Scripts.Components
                     rotationLerpSpeed * Time.deltaTime
                 );
 
-                await Task.Yield();
+                yield return null;
             }
         }
 
@@ -118,9 +113,9 @@ namespace _GameFolders.Scripts.Components
         {
             if (!_hasBounced && collision.gameObject.CompareTag(Constants.Tags.Ground))
             {
-                diceRigidbody.isKinematic = false;
-                diceRigidbody.velocity = Vector3.zero;
-                diceRigidbody.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+                _diceRb.isKinematic = false;
+                _diceRb.velocity = Vector3.zero;
+                _diceRb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
                 _hasBounced = true;
             }
         }

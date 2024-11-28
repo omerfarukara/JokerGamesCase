@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using _GameFolders.Scripts.Components;
 using _GameFolders.Scripts.Controllers;
 using _GameFolders.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace _GameFolders.Scripts.Managers
 {
     public class DiceManager : MonoBehaviour
     {
         [Header("{-- Normal Dice Variables --}")]
+        [SerializeField] private Button normalDiceButton;
         [SerializeField] private Dice firstDice, secondDice;
         [SerializeField] private TMP_InputField firstDiceInputField, secondDiceInputField;
 
@@ -22,13 +26,22 @@ namespace _GameFolders.Scripts.Managers
 
 
         [Header("{-- Dice Camera Managers --}")]
-        [SerializeField] private DiceCameraManager normalDiceCameraManager;
         [SerializeField] private DiceCameraManager bonusDiceCameraManager;
         
         private readonly List<Dice> _dices = new();
 
+        private void Awake()
+        {
+            normalDiceButton.onClick.AddListener(RollDice);
+        }
 
-        public void RollDice()
+        private void Update()
+        {
+            bonusDropdown.interactable = DiceButtonsClickable();
+            normalDiceButton.interactable = DiceButtonsClickable();
+        }
+
+        private void RollDice()
         {
             _dices.Clear();
 
@@ -37,28 +50,30 @@ namespace _GameFolders.Scripts.Managers
 
             if (GameManager.Instance.GameState == GameState.Win || PlayerController.Instance.IsGoing) return;
 
-            NormalRollDiceAsync().ConfigureAwait(true);
+            StartCoroutine(NormalRollDiceAsync());
         }
 
-        private async Task NormalRollDiceAsync()
+        private IEnumerator NormalRollDiceAsync()
         {
             int firstDiceValue = int.Parse(firstDiceInputField.text);
             int secondDiceValue = int.Parse(secondDiceInputField.text);
 
-            if (!AcceptableDiceValue(firstDiceValue) || !AcceptableDiceValue(secondDiceValue)) return;
+            if (!AcceptableDiceValue(firstDiceValue) || !AcceptableDiceValue(secondDiceValue)) yield return null;
 
             GameEventManager.RollDiceStart?.Invoke(RollDiceType.Normal);
 
             firstDice.SelectNumberAndRoll(firstDiceValue);
             secondDice.SelectNumberAndRoll(secondDiceValue);
 
-            await Task.Delay(250);
+            yield return new WaitForSeconds(0.250f);
 
-            await WaitUntilFalse(() => secondDice.IsRolling);
+            yield return new WaitUntil(() => !_dices[0].IsRolling);
 
             GameEventManager.OnMoveTrigger?.Invoke(firstDiceValue + secondDiceValue);
             
-            await Task.Delay(2000);
+            _dices.Clear();
+            
+            yield return new WaitForSeconds(2f);
 
             GameEventManager.RollDiceEnd?.Invoke(RollDiceType.Normal);
         }
@@ -74,12 +89,12 @@ namespace _GameFolders.Scripts.Managers
             
 
             _dices.Clear();
-
+            
             if (bonusDiceParent.childCount > 0)
             {
-                foreach (GameObject dice in bonusDiceParent)
+                foreach (Transform dice in bonusDiceParent)
                 {
-                    Destroy(dice);
+                    Destroy(dice.gameObject);
                 }
             }
             
@@ -101,11 +116,11 @@ namespace _GameFolders.Scripts.Managers
                     bonusDiceCameraManager.LookAtDice = dice;
             }
 
-            BonusRollDiceAsync().ConfigureAwait(true);
+            StartCoroutine(BonusRollDiceAsync());
         }
 
 
-        private async Task BonusRollDiceAsync()
+        private IEnumerator BonusRollDiceAsync()
         {
             int totalAllDiceValue = 0;
 
@@ -116,36 +131,27 @@ namespace _GameFolders.Scripts.Managers
                 dice.SelectNumberAndRoll(randomNumber);
             }
 
-            await Task.Delay(250);
+            yield return new WaitForSeconds(0.250f);
 
-            await WaitAllDice();
+            yield return new WaitUntil(() => !_dices[0].IsRolling);
+
 
             GameEventManager.OnMoveTrigger?.Invoke(totalAllDiceValue);
-            
-            await Task.Delay(2000);
+            _dices.Clear();
+
+            yield return new WaitForSeconds(2f);
+
             GameEventManager.RollDiceEnd?.Invoke(RollDiceType.Bonus);
         }
-
-
-        private async Task WaitUntilFalse(System.Func<bool> condition)
-        {
-            while (condition())
-            {
-                await Task.Yield();
-            }
-        }
-
-        private async Task WaitAllDice()
-        {
-            foreach (Dice dice in _dices)
-            {
-                await WaitUntilFalse(() => dice.IsRolling);
-            }
-        }
+        
 
         private bool AcceptableDiceValue(int value)
         {
             return value is > 0 and < 7;
+        }
+        private bool DiceButtonsClickable()
+        {
+            return (_dices.Count <= 0 || !_dices[0].IsRolling) && !PlayerController.Instance.IsGoing;
         }
     }
 }

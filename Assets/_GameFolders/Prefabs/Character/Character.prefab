@@ -84,7 +84,7 @@ CapsuleCollider:
   m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.99, z: 0}
+  m_Center: {x: 0, y: 0.9994, z: 0}
 --- !u!114 &3239597697890719452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,11 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea9391083ee23164781852882d89de92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0
+  moveDuration: 0.5
+  jumpHeight: 1
+  winRotateDuration: 1
+  winRotateLocalAngle: {x: 0, y: 45, z: 0}
   isGroundedRayDistance: 0.1
   isGroundedLayerMask:
     serializedVersion: 2
     m_Bits: 183
-  playerAnimatorController: {fileID: 8732465813952640715}
+  animator: {fileID: 5079337457435929783}
 --- !u!1001 &1664074738551312678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -192,3 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941625745f79c3d42b832effb28d7ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &5079337457435929783 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 78e3d785ccd253b46b7e03331c671372, type: 3}
+  m_PrefabInstance: {fileID: 1664074738551312678}
+  m_PrefabAsset: {fileID: 0}
